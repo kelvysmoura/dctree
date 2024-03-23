@@ -1,7 +1,7 @@
 
-import './Link.css';
+import './LinkItem.css';
 
-export default function Link({ title, description, label }) {
+export default function LinkItem({ title, description, label }) {
     return (
         <div className="link-wrap">
             
