@@ -10,6 +10,7 @@ import AccountLinks from '@/pages/AccountLinks';
 import Dashboard from '@/pages/Admin/Dashboard';
 import AdminMenu from "@/components/Admin/AdminMenu";
 import CreateLink from "@/pages/Admin/CreateLink";
+import Ui from "@/pages/Admin/Ui";
 
 export default createBrowserRouter(
     createRoutesFromElements(
@@ -19,6 +20,7 @@ export default createBrowserRouter(
             <Route path="/admin">
                 <Route path="dashboard" element={ <Dashboard /> }></Route>
                 <Route path="create-link" element={ <CreateLink /> }></Route>
+                <Route path="ui" element={ <Ui /> }></Route>
             </Route>
         </>
     )
