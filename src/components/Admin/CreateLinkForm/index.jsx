@@ -1,6 +1,7 @@
 
 import Form from "@/components/Form";
 import {useState} from "react";
+import storage from "@/storage";
 
 export default function CreateLinkForm() {
 
@@ -9,8 +10,7 @@ export default function CreateLinkForm() {
     const [link, setLink] = useState();
     const [description, setDescription] = useState();
 
-    let productLinks = window.localStorage.getItem('account-links')
-    productLinks = JSON.parse(productLinks) ?? [];
+    let productLinks = storage.getAccountLinks();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -22,7 +22,7 @@ export default function CreateLinkForm() {
             link
         });
 
-        window.localStorage.setItem('account-links', JSON.stringify(productLinks))
+        storage.setAccountLinks(productLinks);
     }
 
     return (
