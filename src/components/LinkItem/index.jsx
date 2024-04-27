@@ -5,6 +5,7 @@ import storage from '@/storage';
 
 export default function LinkItem({ title, description, label, link }) {
     return (
+        <>
         <div className="link-wrap" >
             {title && description && (
                 <>
@@ -15,5 +16,6 @@ export default function LinkItem({ title, description, label, link }) {
 
             <a href={link} className="link-item" style={storage.getUiStyle()}>{ label }</a>
         </div>
+        </>
     );
 }
