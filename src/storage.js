@@ -23,6 +23,10 @@ export default {
         this.setItem('ui-style', data);
     },
 
+    getUiStyleHover() {
+        return this.getItem('ui-style-hover');
+    },
+
     getUiStyle(attribute, defaultValue) {
         let result = this.getItem('ui-style');
 

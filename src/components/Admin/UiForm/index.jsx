@@ -1,7 +1,7 @@
 import Form from "@/components/Form";
 import { useState } from "react";
 import storage from '@/storage';
-
+import AdminSection from "@/components/Admin/AdminSection";
 
 const selectOptions = [
     { label: "left" },
@@ -16,6 +16,10 @@ export default function UiForm() {
     const [borderRadius, setBorderRadius] = useState(storage.getUiStyle('borderRadius'));
     const [borderWidth, setBorderWidth] = useState(storage.getUiStyle('borderWidth'));
     const [borderColor, setBorderColor] = useState(storage.getUiStyle('borderColor'));
+
+    const [styleHover, setStyleHover] = useState({
+        color: '#ffffff'
+    }) 
     
     
     const handleSubmit = (event) => {
@@ -28,12 +32,15 @@ export default function UiForm() {
             textAlign,
             fontSize
         })
+
+        console.log(styleHover);
+        // storage.setItem('ui-style-hover', styleHover);
     }
 
     return (
         <Form onSubmit={handleSubmit}>
             <h4 >Texto</h4>
-            <div className="row d-flex align-item-bottom">
+            <div className="row">
                 <div className="col">
                     <label className="form-label">Cor</label>
                     <input type="color" className="form-control form-control-color w-100"
@@ -42,7 +49,7 @@ export default function UiForm() {
                 </div>
                 <div className="col">
                     <label className="form-label">Posicionamento</label>
-                    <select className="form-control" value={textAlign} onChange={evet => setTextAlign(evet.target.value)}>
+                    <select className="form-control" value={textAlign} onChange={event => setTextAlign(event.target.value)}>
                         { selectOptions.map(item => (
                             <option key={item.label}>
                                 {item.label}
@@ -80,6 +87,15 @@ export default function UiForm() {
                         onChange={(event) => setBorderRadius(event.target.value)} />
                 </div>
             </div>
+
+            <AdminSection title="Hover" lastSection>
+                <div className="col">
+                    <label className="form-label">Cor do Texto</label>
+                    <input type="color" className="form-control form-control-color w-100"
+                        value={styleHover.color}
+                        onChange={event => setStyleHover(current => current.color = event.target.value)} />
+                </div>
+            </AdminSection>    
         
             <div>
                 <button className="btn btn-dark w-100 mt-3">Salvar</button>
