@@ -7,7 +7,7 @@ const selectOptions = [
     { label: "left" },
     { label: "center" },
     { label: "right"}
-]
+];
 
 export default function UiForm() {
     const [color, setColor] = useState(storage.getUiStyle('color'));
@@ -16,10 +16,11 @@ export default function UiForm() {
     const [borderRadius, setBorderRadius] = useState(storage.getUiStyle('borderRadius'));
     const [borderWidth, setBorderWidth] = useState(storage.getUiStyle('borderWidth'));
     const [borderColor, setBorderColor] = useState(storage.getUiStyle('borderColor'));
+    const [backgroundColor, setBackgroundColor] = useState(storage.getUiStyle('backgroundColor'));
+    
+    const [hoverEnabled, setHoverEnabled] = useState(0);
 
-    const [styleHover, setStyleHover] = useState({
-        color: '#ffffff'
-    }) 
+    const [styleHover, setStyleHover] = useState(storage.getUiStyleHover());
     
     
     const handleSubmit = (event) => {
@@ -30,22 +31,32 @@ export default function UiForm() {
             borderWidth, 
             borderColor,
             textAlign,
-            fontSize
-        })
+            fontSize,
+            backgroundColor
+        });
 
-        console.log(styleHover);
-        // storage.setItem('ui-style-hover', styleHover);
+        if(!hoverEnabled) {
+            storage.setUiStyleHover({});
+            return;    
+        }
+
+        storage.setUiStyleHover(styleHover);
     }
 
     return (
         <Form onSubmit={handleSubmit}>
-            <h4 >Texto</h4>
-            <div className="row">
+            <AdminSection title="Texto e cor de fundo">
                 <div className="col">
                     <label className="form-label">Cor</label>
                     <input type="color" className="form-control form-control-color w-100"
                         value={color}
                         onChange={event => setColor(event.target.value)} />
+                </div>
+                <div className="col">
+                    <label className="form-label">Cor de fundo</label>
+                    <input type="color" className="form-control form-control-color w-100"
+                        value={backgroundColor}
+                        onChange={event => setBackgroundColor(event.target.value)} />
                 </div>
                 <div className="col">
                     <label className="form-label">Posicionamento</label>
@@ -63,7 +74,7 @@ export default function UiForm() {
                         value={fontSize}
                         onChange={(event) => setFontSize(event.target.value)} />
                 </div>
-            </div>
+            </AdminSection>
         
             <hr />
             <h4 className="mt-4">Bordas</h4>
@@ -90,11 +101,33 @@ export default function UiForm() {
 
             <AdminSection title="Hover" lastSection>
                 <div className="col">
-                    <label className="form-label">Cor do Texto</label>
-                    <input type="color" className="form-control form-control-color w-100"
-                        value={styleHover.color}
-                        onChange={event => setStyleHover(current => current.color = event.target.value)} />
+                    <label className="form-label">Status</label>
+                    <select name="" id="" className="form-control" value={hoverEnabled} onChange={event => setHoverEnabled(Number(event.target.value))}>
+                        <option value="0">Desabilitado</option>
+                        <option value="1">Habilitado</option>
+                    </select>
                 </div>
+                        <div className="col">
+                            <label className="form-label">Cor do Texto</label>
+                            <input type="color" className="form-control form-control-color w-100"
+                                disabled={Boolean(!hoverEnabled)}
+                                value={styleHover.color ?? ''}
+                                onChange={event => setStyleHover({...styleHover, color: event.target.value})} />
+                        </div>
+                        <div className="col">
+                            <label className="form-label">Cor da borda</label>
+                            <input type="color" className="form-control form-control-color w-100"
+                                disabled={Boolean(!hoverEnabled)}
+                                value={styleHover.borderColor ?? ''}
+                                onChange={event => setStyleHover({...styleHover, borderColor: event.target.value})} />
+                        </div>
+                        <div className="col">
+                            <label className="form-label">Cor de fundo</label>
+                            <input type="color" className="form-control form-control-color w-100"
+                                disabled={Boolean(!hoverEnabled)}
+                                value={styleHover.backgroundColor ?? ''}
+                                onChange={event => setStyleHover({...styleHover, backgroundColor: event.target.value})} />
+                        </div>
             </AdminSection>    
         
             <div>
