@@ -3,7 +3,6 @@ export default {
 
     getItem(key) {
         let result = window.localStorage.getItem(key);
-        console.log(result)
         return JSON.parse(result) ?? [];
     },
 
@@ -24,8 +23,17 @@ export default {
         this.setItem('ui-style', data);
     },
 
-    getUiStyle() {
+    getUiStyleHover() {
+        return this.getItem('ui-style-hover');
+    },
+
+    getUiStyle(attribute, defaultValue) {
         let result = this.getItem('ui-style');
+
+        if (attribute) {
+            return result[attribute] ?? defaultValue
+        }
+
         let uistyle = {};
         
         Object.entries(result).forEach(item => {
