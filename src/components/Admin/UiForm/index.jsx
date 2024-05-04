@@ -17,6 +17,7 @@ export default function UiForm() {
     const [borderWidth, setBorderWidth] = useState(storage.getUiStyle('borderWidth'));
     const [borderColor, setBorderColor] = useState(storage.getUiStyle('borderColor'));
     const [backgroundColor, setBackgroundColor] = useState(storage.getUiStyle('backgroundColor'));
+    const [logoImage, setLogoImage] = useState(storage.getItem('logo-img'));
     
     const [hoverEnabled, setHoverEnabled] = useState(0);
 
@@ -25,6 +26,9 @@ export default function UiForm() {
     
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        storage.setItem('logo-img', logoImage);
+
         storage.setUiStyle({
             color,
             borderRadius, 
@@ -43,8 +47,27 @@ export default function UiForm() {
         storage.setUiStyleHover(styleHover);
     }
 
+    const uploadHandler = (event) => {
+        let fileReader = new FileReader;
+
+        fileReader.onload = (file) => {
+            setLogoImage(file.target.result);
+        }
+
+        fileReader.readAsDataURL(event.target.files[0]);
+    }
+
     return (
         <Form onSubmit={handleSubmit}>
+            <AdminSection title="Redes sociais e Logo">
+                <div className="col">
+                    <label className="form-label">Logo</label>
+                    <input type="file" className="form-control form-control-color w-100" onChange={uploadHandler} />
+                </div>
+                <div>
+                    <img src={logoImage} width="200px"/>
+                </div>
+            </AdminSection>
             <AdminSection title="Texto e cor de fundo">
                 <div className="col">
                     <label className="form-label">Cor</label>

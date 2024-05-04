@@ -1,11 +1,11 @@
 
-export default function Form({ action, method, onSubmit, children }) {
+export default function Form({ action, method, onSubmit, className, children }) {
     return (
         <form 
             action={action} 
             method={method} 
             onSubmit={onSubmit} 
-            className="w-75">
+            className={className}>
             
             { children }
         </form>
