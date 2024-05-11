@@ -1,9 +1,10 @@
 import Form from "@/components/Form";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import storage from '@/storage';
 import AdminSection from "@/components/Admin/AdminSection";
 import LinkItem from '@/components/LinkItem';
 import PreviewContext from "@/context/PreviewContext";
+import { Preview } from "../../../context/PreviewContext";
 
 const selectOptions = [
     { label: "left" },
@@ -12,42 +13,25 @@ const selectOptions = [
 ];
 
 export default function UiForm() {
-
-    const [uiStyle, setUiStyle] = useState({
-        color: storage.getUiStyle('color', '#000000'),
-        textAlign: storage.getUiStyle('textAlign', 'center'),
-        fontSize: storage.getUiStyle('fontSize', 12),
-        borderRadius: storage.getUiStyle('borderRadius', 0),
-        borderWidth: storage.getUiStyle('borderWidth', 0),
-        borderColor: storage.getUiStyle('borderColor', '#000000'),
-        backgroundColor: storage.getUiStyle('backgroundColor', "#ffffff"),
-        logoImage: storage.getItem('logo-img'),
-    });
-
-    const [uiStyleLive, setUiStyleLive] = useState(uiStyle);
-
-    useEffect(() => {
-        setUiStyleLive(uiStyle);
-    }, [uiStyle]);
+    let {uiStyleLive, uiStyleHover, handleChangeInput, handleChangeInputHover} = useContext(Preview);
     
     const [hoverEnabled, setHoverEnabled] = useState(0);
-
     const [styleHover, setStyleHover] = useState(storage.getUiStyleHover());
     
     
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        storage.setItem('logo-img', uiStyle.logoImage);
+        storage.setItem('logo-img', uiStyleLive.logoImage);
 
-        storage.setUiStyle(uiStyle);
+        storage.setUiStyle(uiStyleLive);
 
         if(!hoverEnabled) {
             storage.setUiStyleHover({});
             return;
         }
 
-        storage.setUiStyleHover(styleHover);
+        storage.setUiStyleHover(uiStyleHover);
     }
 
     const uploadHandler = (event) => {
@@ -61,7 +45,7 @@ export default function UiForm() {
     }
 
     return (
-        <PreviewContext contextData={{uiStyleLive, styleHover}}>
+        <>
             <div className="row">
                 <LinkItem label="Botão de teste" />
             </div>
@@ -72,25 +56,25 @@ export default function UiForm() {
                         <input type="file" className="form-control form-control-color w-100" onChange={uploadHandler} />
                     </div>
                     <div>
-                        <img src={uiStyle.logoImage} width="200px"/>
+                        <img src="" width="200px"/>
                     </div>
                 </AdminSection>
                 <AdminSection title="Texto e cor de fundo">
                     <div className="col">
                         <label className="form-label">Cor</label>
                         <input type="color" className="form-control form-control-color w-100"
-                            value={uiStyle.color}
-                            onChange={event => setUiStyle({...uiStyle, color: event.target.value})} />
+                            value={uiStyleLive.color}
+                            onChange={event => handleChangeInput('color', event.target.value)} />
                     </div>
                     <div className="col">
                         <label className="form-label">Cor de fundo</label>
                         <input type="color" className="form-control form-control-color w-100"
-                            value={uiStyle.backgroundColor}
-                            onChange={event => setUiStyle({...uiStyle, backgroundColor: event.target.value})} />
+                            value={uiStyleLive.backgroundColor}
+                            onChange={event => handleChangeInput('backgroundColor', event.target.value)} />
                     </div>
                     <div className="col">
                         <label className="form-label">Posicionamento</label>
-                        <select className="form-control" value={uiStyle.textAlign} 
+                        <select className="form-control" value={uiStyleLive.textAlign} 
                         onChange={event => setUiStyle({...uiStyle, textAlign: event.target.value})}>
                             { selectOptions.map(item => (
                                 <option key={item.label}>
@@ -100,10 +84,10 @@ export default function UiForm() {
                         </select>
                     </div>
                     <div className="col">
-                        <label className="form-label">Tamanho ({uiStyle.fontSize}px)</label>
+                        <label className="form-label">Tamanho ({uiStyleLive.fontSize}px)</label>
                         <input type="range" min="1" max="52" step="1" className="form-range"
-                            value={uiStyle.fontSize}
-                            onChange={event => setUiStyle({...uiStyle, fontSize: event.target.value})} />
+                            value={uiStyleLive.fontSize}
+                            onChange={event => handleChangeInput('fontSize', event.target.value)} />
                     </div>
                 </AdminSection>
             
@@ -113,20 +97,20 @@ export default function UiForm() {
                     <div className="col">
                         <label className="form-label">Cor</label>
                         <input type="color" className="form-control form-control-color w-100"
-                            value={uiStyle.borderColor}
-                            onChange={event => setUiStyle({...uiStyle, borderColor: event.target.value})} />
+                            value={uiStyleLive.borderColor}
+                            onChange={event => handleChangeInput('borderColor', event.target.value)} />
                     </div>
                     <div className="col">
-                        <label className="form-label">Largura ({uiStyle.borderWidth}px)</label>
+                        <label className="form-label">Largura ({uiStyleLive.borderWidth}px)</label>
                         <input type="range" min="0" max="10" step="1" className="form-range"
-                            value={uiStyle.borderWidth} 
-                            onChange={event => setUiStyle({...uiStyle, borderWidth: event.target.value})} />
+                            value={uiStyleLive.borderWidth} 
+                            onChange={event => handleChangeInput('borderWidth', event.target.value)} />
                     </div>
                     <div className="col">
-                        <label className="form-label">Radius ({uiStyle.borderRadius}px)</label>
+                        <label className="form-label">Radius ({uiStyleLive.borderRadius}px)</label>
                         <input type="range" min="0" max="100" step="1" className="form-range" 
-                            value={uiStyle.borderRadius} 
-                            onChange={event => setUiStyle({...uiStyle, borderRadius: event.target.value})} />
+                            value={uiStyleLive.borderRadius} 
+                            onChange={event => handleChangeInput('borderRadius', event.target.value)} />
                     </div>
                 </div>
 
@@ -143,21 +127,21 @@ export default function UiForm() {
                         <input type="color" className="form-control form-control-color w-100"
                             disabled={Boolean(!hoverEnabled)}
                             value={styleHover.color ?? ''}
-                            onChange={event => setStyleHover({...styleHover, color: event.target.value})} />
+                            onChange={event => handleChangeInputHover('color', event.target.value)} />
                     </div>
                     <div className="col">
                         <label className="form-label">Cor da borda</label>
                         <input type="color" className="form-control form-control-color w-100"
                             disabled={Boolean(!hoverEnabled)}
                             value={styleHover.borderColor ?? ''}
-                            onChange={event => setStyleHover({...styleHover, borderColor: event.target.value})} />
+                            onChange={event => handleChangeInputHover('borderColor', event.target.value)} />
                     </div>
                     <div className="col">
                         <label className="form-label">Cor de fundo</label>
                         <input type="color" className="form-control form-control-color w-100"
                             disabled={Boolean(!hoverEnabled)}
                             value={styleHover.backgroundColor ?? ''}
-                            onChange={event => setStyleHover({...styleHover, backgroundColor: event.target.value})} />
+                            onChange={event => handleChangeInputHover('backgroundColor', event.target.value)} />
                     </div>
                 </AdminSection>    
             
@@ -165,6 +149,6 @@ export default function UiForm() {
                     <button className="btn btn-dark w-100 mt-3">Salvar</button>
                 </div>
             </Form>
-        </PreviewContext>
+        </>
     );
 }

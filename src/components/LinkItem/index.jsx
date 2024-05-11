@@ -5,9 +5,9 @@ import storage from '@/storage';
 import { Preview } from '@/context/PreviewContext';
 
 export default function LinkItem({ title, description, label, link }) {
-    let {uiStyleLive, styleHover} = useContext(Preview);
+    let { uiStyleHover, uiStyleLive} = useContext(Preview);
 
-    let uiStyleHover = storage.getUiStyleHover();
+    // let uiStyleHover = storage.getUiStyleHover();
     let uiStyle = storage.getUiStyle();
 
     const [style, setStyle] = useState(uiStyle);
@@ -23,14 +23,14 @@ export default function LinkItem({ title, description, label, link }) {
     }, [uiStyleLive]);
 
     const handleHover = () => {
-        let currentStyle = uiStyleLive ?? uiStyle
-        let currentHover = styleHover ?? uiStyleHover
-        setStyle({...currentStyle, ...currentHover});
+        // let currentStyle = uiStyleLive ?? uiStyle
+        // let currentHover = styleHover ?? uiStyleHover
+        setStyle({...uiStyleLive, ...uiStyleHover});
     }
 
     const handleLeave = () => {
-        let currentStyle = uiStyleLive ?? uiStyle
-        setStyle(currentStyle);
+        // let currentStyle = uiStyleLive ?? uiStyle
+        setStyle(uiStyleLive);
     }
 
     return (
