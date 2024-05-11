@@ -5,7 +5,7 @@ import storage from '@/storage';
 import { Preview } from '@/context/PreviewContext';
 
 export default function LinkItem({ title, description, label, link }) {
-    let uiStyleLive = useContext(Preview);
+    let {uiStyleLive, styleHover} = useContext(Preview);
 
     let uiStyleHover = storage.getUiStyleHover();
     let uiStyle = storage.getUiStyle();
@@ -13,6 +13,7 @@ export default function LinkItem({ title, description, label, link }) {
     const [style, setStyle] = useState(uiStyle);
 
     useEffect(() => {
+        if(!uiStyleLive) return;
         setStyle({
             ...uiStyleLive,
             fontSize: uiStyleLive.fontSize + 'px',
@@ -20,6 +21,17 @@ export default function LinkItem({ title, description, label, link }) {
             borderWidth: uiStyleLive.borderWidth + 'px'
         });
     }, [uiStyleLive]);
+
+    const handleHover = () => {
+        let currentStyle = uiStyleLive ?? uiStyle
+        let currentHover = styleHover ?? uiStyleHover
+        setStyle({...currentStyle, ...currentHover});
+    }
+
+    const handleLeave = () => {
+        let currentStyle = uiStyleLive ?? uiStyle
+        setStyle(currentStyle);
+    }
 
     return (
         <>
@@ -31,8 +43,8 @@ export default function LinkItem({ title, description, label, link }) {
                 </>
             )}
             <a href={link} className="link-item" style={style} 
-                onMouseOver={ () => setStyle({...uiStyle, ...uiStyleHover}) } 
-                onMouseLeave={ () => setStyle(uiStyle)}>{ label }</a>
+                onMouseOver={ handleHover } 
+                onMouseLeave={ handleLeave}>{ label }</a>
         </div>
         </>
     );

@@ -12,23 +12,15 @@ const selectOptions = [
 ];
 
 export default function UiForm() {
-    // const [color, setColor] = useState(storage.getUiStyle('color'));
-    // const [textAlign, setTextAlign] = useState(storage.getUiStyle('textAlign'));
-    // const [fontSize, setFontSize] = useState(storage.getUiStyle('fontSize', 1));
-    // const [borderRadius, setBorderRadius] = useState(storage.getUiStyle('borderRadius'));
-    // const [borderWidth, setBorderWidth] = useState(storage.getUiStyle('borderWidth'));
-    // const [borderColor, setBorderColor] = useState(storage.getUiStyle('borderColor'));
-    // const [backgroundColor, setBackgroundColor] = useState(storage.getUiStyle('backgroundColor'));
-    // const [logoImage, setLogoImage] = useState(storage.getItem('logo-img'));
 
     const [uiStyle, setUiStyle] = useState({
-        color: storage.getUiStyle('color'),
-        textAlign: storage.getUiStyle('textAlign'),
-        fontSize: storage.getUiStyle('fontSize', 1),
-        borderRadius: storage.getUiStyle('borderRadius'),
-        borderWidth: storage.getUiStyle('borderWidth'),
-        borderColor: storage.getUiStyle('borderColor'),
-        backgroundColor: storage.getUiStyle('backgroundColor'),
+        color: storage.getUiStyle('color', '#000000'),
+        textAlign: storage.getUiStyle('textAlign', 'center'),
+        fontSize: storage.getUiStyle('fontSize', 12),
+        borderRadius: storage.getUiStyle('borderRadius', 0),
+        borderWidth: storage.getUiStyle('borderWidth', 0),
+        borderColor: storage.getUiStyle('borderColor', '#000000'),
+        backgroundColor: storage.getUiStyle('backgroundColor', "#ffffff"),
         logoImage: storage.getItem('logo-img'),
     });
 
@@ -46,13 +38,13 @@ export default function UiForm() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        storage.setItem('logo-img', logoImage);
+        storage.setItem('logo-img', uiStyle.logoImage);
 
         storage.setUiStyle(uiStyle);
 
         if(!hoverEnabled) {
             storage.setUiStyleHover({});
-            return;    
+            return;
         }
 
         storage.setUiStyleHover(styleHover);
@@ -69,7 +61,7 @@ export default function UiForm() {
     }
 
     return (
-        <PreviewContext contextData={uiStyleLive}>
+        <PreviewContext contextData={{uiStyleLive, styleHover}}>
             <div className="row">
                 <LinkItem label="Botão de teste" />
             </div>
