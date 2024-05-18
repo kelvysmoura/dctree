@@ -14,7 +14,7 @@ const selectOptions = [
 
 export default function UiForm() {
     const uploadHandler = () => {};
-    
+
     const {
         uiStyle,
         setUiStyle,
@@ -26,9 +26,11 @@ export default function UiForm() {
         setHoverEnabled,
         handleSubmit
     } = useContext(Preview);
+
+    console.log(uiStyle)
     
     return (
-        <PreviewContext contextData={{uiStyleLive, styleHover}}>
+        <>
             <div className="row">
                 <LinkItem label="Botão de teste" />
             </div>
@@ -132,6 +134,6 @@ export default function UiForm() {
                     <button className="btn btn-dark w-100 mt-3">Salvar</button>
                 </div>
             </Form>
-        </PreviewContext>
+        </>
     );
 }
