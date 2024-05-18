@@ -8,6 +8,7 @@ const links = storage.getAccountLinks()
 export default function AccountLinks() {
   return (
     <LinkList>
+      <img src={storage.getItem('logo-img')} width="200px" className='m-auto'></img>
       { links.map((item, index) => <LinkItem key={index} {...item} />) }
     </LinkList>
   );
