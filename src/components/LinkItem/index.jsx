@@ -14,7 +14,9 @@ export default function LinkItem({ title, description, label, link }) {
     const [style, setStyle] = useState(uiStyle);
     
     useEffect(() => {
-        if(!isStyleLive) return;
+        if(!isStyleLive) {
+            return;
+        }
         setStyle({
             ...uiStyleLive,
             fontSize: uiStyleLive.fontSize + 'px',
@@ -22,13 +24,15 @@ export default function LinkItem({ title, description, label, link }) {
             borderWidth: uiStyleLive.borderWidth + 'px'
         });
     }, [uiStyleLive]);
+    
     const handleHover = () => {
         let currentStyle = !isStyleLive ? uiStyle : uiStyleLive 
         let currentHover = Object.values(styleHover).length === 0 ? uiStyleHover : styleHover
         setStyle({...currentStyle, ...currentHover});
     }
 
-    const handleLeave = () => {
+    const handleLeave = () => 
+    {
         let currentStyle = !isStyleLive ? uiStyle : uiStyleLive;
         setStyle(currentStyle);
     }
