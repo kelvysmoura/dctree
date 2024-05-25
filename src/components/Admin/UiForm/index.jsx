@@ -1,9 +1,10 @@
 import Form from "@/components/Form";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import storage from '@/storage';
 import AdminSection from "@/components/Admin/AdminSection";
 import LinkItem from '@/components/LinkItem';
 import PreviewContext from "@/context/PreviewContext";
+import { Preview } from "@/context/PreviewContext";
 
 const selectOptions = [
     { label: "left" },
@@ -12,56 +13,24 @@ const selectOptions = [
 ];
 
 export default function UiForm() {
+    const uploadHandler = () => {};
 
-    const [uiStyle, setUiStyle] = useState({
-        color: storage.getUiStyle('color', '#000000'),
-        textAlign: storage.getUiStyle('textAlign', 'center'),
-        fontSize: storage.getUiStyle('fontSize', 12),
-        borderRadius: storage.getUiStyle('borderRadius', 0),
-        borderWidth: storage.getUiStyle('borderWidth', 0),
-        borderColor: storage.getUiStyle('borderColor', '#000000'),
-        backgroundColor: storage.getUiStyle('backgroundColor', "#ffffff"),
-        logoImage: storage.getItem('logo-img'),
-    });
+    const {
+        uiStyle,
+        setUiStyle,
+        uiStyleLive,
+        setUiStyleLive,
+        styleHover,
+        setStyleHover,
+        hoverEnabled, 
+        setHoverEnabled,
+        handleSubmit
+    } = useContext(Preview);
 
-    const [uiStyleLive, setUiStyleLive] = useState(uiStyle);
-
-    useEffect(() => {
-        setUiStyleLive(uiStyle);
-    }, [uiStyle]);
+    console.log(uiStyle)
     
-    const [hoverEnabled, setHoverEnabled] = useState(0);
-
-    const [styleHover, setStyleHover] = useState(storage.getUiStyleHover());
-    
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        storage.setItem('logo-img', uiStyle.logoImage);
-
-        storage.setUiStyle(uiStyle);
-
-        if(!hoverEnabled) {
-            storage.setUiStyleHover({});
-            return;
-        }
-
-        storage.setUiStyleHover(styleHover);
-    }
-
-    const uploadHandler = (event) => {
-        let fileReader = new FileReader;
-
-        fileReader.onload = (file) => {
-            setLogoImage(file.target.result);
-        }
-
-        fileReader.readAsDataURL(event.target.files[0]);
-    }
-
     return (
-        <PreviewContext contextData={{uiStyleLive, styleHover}}>
+        <>
             <div className="row">
                 <LinkItem label="Botão de teste" />
             </div>
@@ -165,6 +134,6 @@ export default function UiForm() {
                     <button className="btn btn-dark w-100 mt-3">Salvar</button>
                 </div>
             </Form>
-        </PreviewContext>
+        </>
     );
 }
