@@ -1,4 +1,4 @@
-import Rigester from '../../src/pages/Register';
+import Register from '../../src/pages/Register';
 import { MemoryRouter } from 'react-router-dom'
 import './../../src/assets/bootstrap.min.css'
 
@@ -57,11 +57,11 @@ describe("page/Register", () => {
         
         cy.get("form button")
             .should("have.length", 1)
-            .and('have.text', "Cadastrar")
+            .and('have.text', "Cadastrar");
         
         cy.get('a')
             .should('have.length', 1)
-            .and('have.text', "Fazer login")
+            .and('have.text', "Fazer login");
         
     })
 })
