@@ -1,15 +1,18 @@
 
 import Form from "@/components/Form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate()
+
     const [showError, setShowError] = useState({
         emailError: false,
         passwordError: false
     });
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('joaqui@mail.com');
+    const [password, setPassword] = useState('1234');
 
     const handleError = () => {
         setShowError({
@@ -32,6 +35,22 @@ export default function Login() {
     const handleSubmit = (event) => {
         event.preventDefault();
         handleError();
+
+        const options = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: `{"email":"${email}","password":"${password}"}`
+          };
+          
+          fetch('http://localhost:3000/user/token', options)
+            .then(response => response.json())
+            .then(response => {
+                if(response.token) {
+                    localStorage.setItem("token", response.token);
+                    navigate('/admin/dashboard')
+                }
+            })
+            .catch(err => console.error(err));
     }
 
     return (
